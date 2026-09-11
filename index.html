@@ -26,7 +26,14 @@
   --ease: cubic-bezier(0.16, 1, 0.3, 1);
 }
 *{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:auto}
+html{scroll-behavior:smooth;scroll-padding-top:110px}
+section[id]{scroll-margin-top:12px}
+.back-to-top{position:fixed;right:max(20px,env(safe-area-inset-right));bottom:calc(20px + env(safe-area-inset-bottom));z-index:48;width:48px;height:48px;display:grid;place-items:center;border-radius:50%;background:var(--violet);color:white;box-shadow:0 6px 24px #25114d40;opacity:0;visibility:hidden;transform:translateY(12px);transition:opacity .2s,transform .2s,visibility .2s}
+.back-to-top.visible{opacity:1;visibility:visible;transform:translateY(0)}
+.back-to-top:focus-visible,.hamburger:focus-visible{outline:3px solid var(--pink);outline-offset:4px}
+.mobile-menu{visibility:hidden}
+.mobile-menu.open{visibility:visible}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
 body{
   font-family:'Instrument Sans', system-ui, -apple-system, sans-serif;
   background: var(--cream);
@@ -418,7 +425,7 @@ img{max-width:100%;display:block}
   position:absolute;left:50%;bottom:10px;transform:translateX(-50%);
   background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.18);
   color:white;padding:9px 16px;border-radius:999px;font-size:13px;font-weight:700;
-  backdrop-filter:blur(10px);display:flex;align-items:center;gap:8px;opacity:0;
+  backdrop-filter:blur(10px);display:flex;align-items:center;gap:8px;opacity:1;
 }
 .connected-badge i{width:8px;height:8px;background:#27C93F;border-radius:50%;box-shadow:0 0 10px #27C93F;display:inline-block}
 
@@ -558,8 +565,8 @@ img{max-width:100%;display:block}
 .ai-orb p{font-size:10px;color:rgba(255,255,255,0.6)}
 .ao1{left:16px;top:18px;animation:floatA 5s infinite}
 .ao2{right:14px;top:28px;animation:floatB 5.5s infinite 0.4s}
-.ao3{left:18px;bottom:18px;animation:floatA 5.3s infinite 0.8s}
-.ao4{right:16px;bottom:22px;animation:floatB 5.7s infinite 0.2s}
+.ao3{left:18px;bottom:84px;animation:floatA 5.3s infinite 0.8s}
+.ao4{right:16px;bottom:84px;animation:floatB 5.7s infinite 0.2s}
 .ai-states{
   position:absolute;left:50%;bottom:14px;transform:translateX(-50%);
   background:rgba(12,11,22,0.9);border:1px solid rgba(255,255,255,0.12);
@@ -909,7 +916,7 @@ img{max-width:100%;display:block}
 
 /* TYPOGRAPHY REVEAL */
 .reveal-line{overflow:hidden;display:block}
-.reveal-line span{display:block;transform:translateY(110%);will-change:transform}
+.reveal-line > span{display:block;will-change:transform}
 
 /* RESPONSIVE */
 @media(max-width:1100px){
@@ -955,19 +962,46 @@ img{max-width:100%;display:block}
   .hero{padding:88px 0 20px}
   .hero h1{font-size:42px}
   .hero-desc{font-size:15px}
-  .hero-visual{height:480px}
-  .float-card{scale:0.92}
-  .float-a{left:-8px;top:48px}
-  .float-b{right:-6px;top:10px}
-  .float-c{right:6px;bottom:72px}
-  .float-d{left:4px;bottom:18px}
+  .hero-grid{gap:28px;grid-template-columns:minmax(0,1fr)}
+  .hero-visual{height:auto;order:0;min-width:0;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;perspective:none}
+  .dashboard-wrap{grid-column:1/-1;max-width:100%;transform:none!important}
+  .dash-top{height:auto;min-height:44px;flex-wrap:wrap;gap:14px;padding:12px}
+  .dash-tabs .active{padding-bottom:4px;margin-bottom:0}
+  .dash-body{padding:10px;gap:10px}
+  .dash-metrics{gap:6px;grid-template-columns:repeat(3,minmax(0,1fr))}
+  .metric{padding:10px 6px;min-width:0}
+  .metric strong{font-size:17px}
+  .metric span{display:table;margin:5px 0 0;font-size:10px}
+  .chart-head{gap:8px;flex-wrap:wrap}
+  .chart-head h4{font-size:11px}
+  .mini-card{padding:8px;gap:6px;min-width:0}
+  .mini-icon{flex-shrink:0;width:26px;height:26px}
+  .float-card{position:static;scale:1;animation:none;min-width:0;width:100%;padding:10px;gap:8px;flex-wrap:wrap;align-self:stretch;box-shadow:0 6px 18px rgba(16,16,20,.07)}
+  .float-card .icon{width:28px;height:28px;font-size:12px}
+  .float-card h5{font-size:12px}
+  .float-card p{font-size:11px;overflow-wrap:anywhere}
+  .float-card .badge{font-size:9px}
+  .hero-trust{flex-wrap:wrap;gap:12px}
+  .eyebrow{font-size:9px;letter-spacing:.08em}
+  .ai-copy > div:last-child{flex-wrap:wrap}
+  .ai-visual{height:auto;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;padding:16px;overflow:hidden}
+  .ai-core{grid-column:1/-1;grid-row:2;justify-self:center;margin:28px 0;width:140px;height:140px}
+  .ai-orb{position:static;min-width:0;padding:10px 8px;gap:7px;animation:none;align-self:stretch}
+  .ai-orb .ico{flex-shrink:0}
+  .ai-orb p{line-height:1.4;margin-top:4px}
+  .ai-states{position:static;transform:none;min-width:0;grid-column:1/-1;width:100%;border-radius:16px;flex-wrap:wrap;gap:8px;margin-top:4px;padding:12px}
+  .ai-states > div:first-child{flex:1 1 100%;min-height:30px}
+  .ai-states .dot{flex-shrink:0}
+  .ai-states .progress{flex:1}
   .stats-inner{grid-template-columns:1fr 1fr;padding:14px;gap:10px}
   .stat{padding:14px 14px}
   .stat .num{font-size:32px}
   .stat .trend{right:10px;top:10px;padding:4px 7px;font-size:10px}
-  .orbit{height:560px}
-  .platform-node{width:110px;height:110px;border-radius:18px}
-  .center-node{width:132px;height:132px;border-radius:22px}
+  .orbit{height:auto;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;max-width:440px}
+  .platform-node{position:static;width:100%;height:auto;min-height:126px;border-radius:18px;transform:none!important;padding:14px 8px}
+  .center-node{position:relative;left:auto;top:auto;grid-column:1/-1;grid-row:2;justify-self:center;transform:none!important;width:140px;height:140px;border-radius:22px;margin:16px 0}
+  .orbit > svg{display:none}
+  .connected-badge{position:static;grid-column:1/-1;justify-self:center;transform:none!important;margin-top:8px;max-width:100%;font-size:12px}
   .kinetic-row{font-size:18px}
   .ba-grid{grid-template-columns:1fr}
   .scatter{height:360px}
@@ -986,6 +1020,7 @@ img{max-width:100%;display:block}
 </style>
 </head>
 <body>
+<a class="back-to-top" id="backToTop" href="#top" aria-label="Back to top" title="Back to top"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m6 12 6-6 6 6M12 6v13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
 
 <div class="mobile-backdrop" id="mobileBackdrop"></div>
 <!-- NAV -->
@@ -1906,68 +1941,85 @@ img{max-width:100%;display:block}
 </footer>
 
 <script>
-gsap.registerPlugin(ScrollTrigger);
+const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+const lenis = window.Lenis && !reducedMotion.matches ? new Lenis({ duration: 1.1, smoothWheel:true }) : null;
+if(lenis){
+  document.documentElement.style.scrollBehavior = 'auto';
+  function raf(time){ lenis.raf(time); requestAnimationFrame(raf); }
+  requestAnimationFrame(raf);
+  if(window.ScrollTrigger) lenis.on('scroll', ScrollTrigger.update);
+}
 
-// LENIS
-const lenis = new Lenis({ duration: 1.1, easing: (t)=> Math.min(1, 1.001 - Math.pow(2, -10*t)), smoothWheel:true });
-function raf(time){ lenis.raf(time); requestAnimationFrame(raf); }
-requestAnimationFrame(raf);
-lenis.on('scroll', ScrollTrigger.update);
-gsap.ticker.add((time)=>{ lenis.raf(time*1000) });
-gsap.ticker.lagSmoothing(0);
-
-// NAV scroll shrink
 const nav = document.getElementById('nav');
-ScrollTrigger.create({
-  start: 'top -80',
-  onUpdate: self=>{
-    if(self.direction===1 && self.progress>0) nav.classList.add('scrolled');
-    if(self.progress===0) nav.classList.remove('scrolled');
-  }
-});
-
-// MOBILE MENU toggle
+const backToTop = document.getElementById('backToTop');
 const hamburger = document.getElementById('hamburger');
 const mobileMenu = document.getElementById('mobileMenu');
 const mobileBackdrop = document.getElementById('mobileBackdrop');
 let menuOpen = false;
-function setMenu(open){
+mobileMenu.inert = true;
+function setMenu(open, restoreFocus = false){
   menuOpen = open;
-  hamburger.setAttribute('aria-expanded', open ? 'true' : 'false');
+  hamburger.setAttribute('aria-expanded', String(open));
   hamburger.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
   mobileMenu.classList.toggle('open', open);
   mobileBackdrop.classList.toggle('open', open);
-  mobileMenu.setAttribute('aria-hidden', open ? 'false' : 'true');
+  mobileMenu.setAttribute('aria-hidden', String(!open));
+  mobileMenu.inert = !open;
   document.body.style.overflow = open ? 'hidden' : '';
-  if(open){
-    try{ lenis.stop(); }catch(e){}
-    gsap.fromTo('.mobile-links a', {opacity:0, x:-8}, {opacity:1, x:0, duration:0.35, stagger:0.04, ease:'power3.out', overwrite:true});
-    gsap.fromTo('.mobile-ctas a', {opacity:0, y:8}, {opacity:1, y:0, duration:0.35, stagger:0.07, delay:0.16, ease:'power3.out', overwrite:true});
-  } else {
-    try{ lenis.start(); }catch(e){}
+  if(open) lenis?.stop(); else lenis?.start();
+  if(restoreFocus) hamburger.focus();
+}
+hamburger.addEventListener('click', ()=>setMenu(!menuOpen));
+mobileBackdrop.addEventListener('click', ()=>setMenu(false, true));
+document.addEventListener('keydown', (event)=>{
+  if(!menuOpen) return;
+  if(event.key === 'Escape') setMenu(false, true);
+  if(event.key === 'Tab'){
+    const links = [...mobileMenu.querySelectorAll('a[href]')];
+    if(event.shiftKey && document.activeElement === hamburger){
+      event.preventDefault(); links.at(-1).focus();
+    }else if(!event.shiftKey && document.activeElement === links.at(-1)){
+      event.preventDefault(); hamburger.focus();
+    }
   }
+});
+window.addEventListener('resize', ()=>{ if(window.innerWidth > 980 && menuOpen) setMenu(false); });
+function updateNavigation(){
+  nav.classList.toggle('scrolled', window.scrollY > 80);
+  backToTop.classList.toggle('visible', window.scrollY > 300);
 }
-if(hamburger && mobileMenu){
-  hamburger.addEventListener('click', (e)=>{
-    e.stopPropagation();
-    setMenu(!menuOpen);
-  });
-  mobileBackdrop.addEventListener('click', ()=> setMenu(false));
-  mobileMenu.querySelectorAll('a').forEach(a=> a.addEventListener('click', ()=> setMenu(false)));
-  document.addEventListener('keydown', (e)=>{ if(e.key==='Escape' && menuOpen) setMenu(false); });
-  window.addEventListener('resize', ()=>{
-    if(window.innerWidth > 980 && menuOpen) setMenu(false);
-  });
-  // close when scrolling via Lenis
-  lenis.on('scroll', ()=>{
-    if(menuOpen && window.scrollY > 20) { /* keep open */ }
-  });
-}
+window.addEventListener('scroll', updateNavigation, {passive:true});
+updateNavigation();
+document.addEventListener('click', (event)=>{
+  const link = event.target.closest('a[href^="#"]');
+  if(!link || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+  const hash = link.getAttribute('href');
+  if(mobileMenu.contains(link)) setMenu(false);
+  if(hash === '#') return;
+  const target = document.getElementById(decodeURIComponent(hash.slice(1)));
+  if(!target) return;
+  event.preventDefault();
+  const offset = document.getElementById('navWrap').getBoundingClientRect().bottom + 20;
+  const top = hash === '#top' ? 0 : Math.max(0, target.getBoundingClientRect().top + window.scrollY - offset);
+  const focusTarget = ()=>{
+    target.setAttribute('tabindex', '-1');
+    target.focus({preventScroll:true});
+  };
+  if(lenis && !reducedMotion.matches){
+    lenis.scrollTo(top, {onComplete:focusTarget});
+  }else{
+    window.scrollTo({top, behavior:reducedMotion.matches ? 'instant' : 'smooth'});
+    focusTarget();
+  }
+  if(window.location.hash !== hash) history.pushState(null, '', hash);
+});
 
+if(window.gsap && window.ScrollTrigger){
+gsap.registerPlugin(ScrollTrigger);
 // HERO masked reveal
-gsap.set('.reveal-line span', { y:'110%' });
+gsap.set('.reveal-line > span', { y:reducedMotion.matches ? 0 : '110%' });
 gsap.timeline({ defaults:{ ease:'cubic-bezier(0.16, 1, 0.3, 1)' }})
-  .to('.reveal-line span', { y:'0%', duration:0.9, stagger:0.1, delay:0.3 })
+  .to('.reveal-line > span', { y:'0%', duration:reducedMotion.matches ? 0 : 0.9, stagger:0.1, delay:0.3 })
   .from('#heroDesc', { opacity:0, y:14, duration:0.7 }, '-=0.4')
   .from('#heroCtas', { opacity:0, y:14, duration:0.7 }, '-=0.5')
   .from('#dashWrap', { scale:0.88, y:80, rotation:4, duration:1.2, ease:'cubic-bezier(0.16, 1, 0.3, 1)' }, '-=0.8')
@@ -1975,6 +2027,7 @@ gsap.timeline({ defaults:{ ease:'cubic-bezier(0.16, 1, 0.3, 1)' }})
   .from('.blob', { opacity:0, scale:0.9, duration:1.0, stagger:0.1 }, 0);
 
 // hero parallax on scroll
+gsap.matchMedia().add('(min-width: 641px) and (prefers-reduced-motion: no-preference)', ()=>{
 gsap.to('#dashWrap', {
   scale:1.08, rotation:0,
   scrollTrigger:{ trigger:'.hero', start:'top top', end:'bottom 40%', scrub:1 }
@@ -1982,6 +2035,7 @@ gsap.to('#dashWrap', {
 gsap.to('.hero-bg .blob-1', { y: -30, scrollTrigger:{ trigger:'.hero', start:'top top', end:'bottom top', scrub:1 }});
 gsap.to('.hero-bg .blob-2', { y: 20, x: -10, scrollTrigger:{ trigger:'.hero', start:'top top', end:'bottom top', scrub:1 }});
 gsap.to('#heroTitle', { y: -40, opacity:0.85, scrollTrigger:{ trigger:'.hero', start:'top top', end:'40% top', scrub:1 }});
+});
 
 // mouse parallax for 3D objects
 const heroBg = document.getElementById('heroBg');
@@ -2323,6 +2377,7 @@ headings.forEach(h=>{
   gsap.from(h, { y:18, opacity:0, duration:0.8, ease:'power3.out', scrollTrigger:{ trigger:h, start:'top 88%' }});
 });
 
+}
 </script>
 <script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a397223e2bde9d73',t:'MTc4OTEzNDU0NQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
