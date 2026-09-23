@@ -1,4 +1,4 @@
-Add-Type -AssemblyName System.Drawing
+﻿Add-Type -AssemblyName System.Drawing
 $root = Split-Path $PSScriptRoot -Parent
 $outDir = Join-Path $root 'assets'
 $cream = [System.Drawing.ColorTranslator]::FromHtml('#F4F4F1')
@@ -17,28 +17,35 @@ function Draw-Text($g,$text,$size,$weight,$color,$x,$y) {
   $g.DrawString($text,$font,$brush,$x,$y)
   $font.Dispose(); $brush.Dispose()
 }
-$canvas = New-Canvas 1200 630
-$bmp,$g = $canvas
-$g.Clear($cream)
-$purpleBrush = [System.Drawing.SolidBrush]::new($violet)
-$g.FillRectangle($purpleBrush,0,0,1200,12)
-Draw-Text $g 'adsrunner' 44 Bold $ink 76 54
-$g.FillEllipse($purpleBrush,295,88,12,12)
-Draw-Text $g 'Your brand. Your ads.' 70 Bold $ink 70 179
-Draw-Text $g 'One workspace.' 76 Bold $violet 70 265
-Draw-Text $g 'Build your brand. Create ad images with AI.' 28 Regular $ink 76 390
-Draw-Text $g 'Review campaigns and connected accounts.' 28 Regular $ink 76 433
-Draw-Text $g 'BRAND SETUP  /  AI IMAGES  /  CAMPAIGN OVERVIEW' 19 Bold $ink 78 552
-$bmp.Save((Join-Path $outDir 'og-image.png'),[System.Drawing.Imaging.ImageFormat]::Png)
-$g.Dispose(); $bmp.Dispose(); $purpleBrush.Dispose()
-foreach($size in @(32,180,256)) {
+# Shared geometric lowercase a, identical at every size.
+function Draw-Mark($g,$x,$y,$size) {
+  $state = $g.Save()
+  $g.TranslateTransform($x,$y)
+  $g.ScaleTransform(($size/64),($size/64))
+  $white = [System.Drawing.SolidBrush]::new([System.Drawing.Color]::White)
+  $purple = [System.Drawing.SolidBrush]::new($violet)
+  $g.FillRectangle($purple,0,0,64,64)
+  $g.FillEllipse($white,13,14,36,36)
+  $g.FillRectangle($white,43,15,8,34)
+  $g.FillEllipse($purple,22,22,20,20)
+  $white.Dispose(); $purple.Dispose(); $g.Restore($state)
+}
+foreach($size in @(16,32,180,256,1200)) {
   $bmp,$g = New-Canvas $size $size
-  $g.Clear($violet)
-  Draw-Text $g 'a' ($size * 0.94) Bold ([System.Drawing.Color]::White) ($size * 0.08) (-$size * 0.18)
-  $name = if($size -eq 180){'apple-touch-icon.png'} elseif($size -eq 32){'favicon-32.png'} else {'favicon-256.png'}
+  Draw-Mark $g 0 0 $size
+  $name = switch($size){16 {'favicon-16.png'} 32 {'favicon-32.png'} 180 {'apple-touch-icon.png'} 256 {'favicon-256.png'} 1200 {'og-square-v3.png'}}
   $bmp.Save((Join-Path $outDir $name),[System.Drawing.Imaging.ImageFormat]::Png)
   $g.Dispose(); $bmp.Dispose()
 }
+$bmp,$g = New-Canvas 1200 630
+$g.Clear($cream)
+Draw-Mark $g 80 180 240
+Draw-Text $g 'adsrunner' 92 Bold $ink 365 187
+$purpleBrush = [System.Drawing.SolidBrush]::new($violet)
+$g.FillEllipse($purpleBrush,829,270,20,20)
+Draw-Text $g 'Your ads. One workspace.' 38 Bold $ink 371 325
+$bmp.Save((Join-Path $outDir 'og-wide-v3.png'),[System.Drawing.Imaging.ImageFormat]::Png)
+$g.Dispose(); $bmp.Dispose(); $purpleBrush.Dispose()
 # A PNG-compressed ICO with 32px and 256px entries.
 $images = @([IO.File]::ReadAllBytes((Join-Path $outDir 'favicon-32.png')), [IO.File]::ReadAllBytes((Join-Path $outDir 'favicon-256.png')))
 $stream = [IO.File]::Create((Join-Path $root 'favicon.ico'))
