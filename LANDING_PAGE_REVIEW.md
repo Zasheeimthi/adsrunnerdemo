@@ -21,3 +21,5 @@ Preserved GSAP, ScrollTrigger and Lenis animations from the reference. Removed a
 Verified desktop at 1440px and mobile at 390px, workflow selection by click and keyboard, audience switching, mobile menu/Escape, internal anchors and browser console. JavaScript syntax and `git diff --check` pass.
 
 FAQ restored per user reference: four native details accordions with matching rounded cards, violet controls, serif heading and responsive two-column layout. Added desktop/mobile navigation and footer links. Verified click expansion, Enter collapse, and mobile width.
+
+Product use cases now replace the audience tabs with three overlapping sticky cards in the reference violet, yellow and dark colors. Content is grounded in the previously observed onboarding, creative-studio and campaign/connection interfaces; no new private tenant access was made. Removed the sample audience ROAS dashboard. Cards cover brand setup, creative briefs and campaign oversight, with explicit preview labels. Desktop scrolling confirms overlapping sticky positions; reduced-motion and short-height screens use a normal non-sticky layout. FAQ and social icons remain intact.
